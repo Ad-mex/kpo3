@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "5b035cda-fcee-46db-abd0-77e7c403211a",
+		"name": "kpo3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50782540",
+		"_collection_link": "https://adamkhrom-3620479.postman.co/workspace/adam-team's-Workspace~52ae58ee-8ee6-422d-891b-c173950e22a1/collection/50782540-5b035cda-fcee-46db-abd0-77e7c403211a?action=share&source=collection_link&creator=50782540"
+	},
+	"item": [
+		{
+			"name": "POST LUPKA",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/home/voinchuguna/pr/kpo3/README.md"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/upload?student=Lupka&workId=123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"upload"
+					],
+					"query": [
+						{
+							"key": "student",
+							"value": "Lupka"
+						},
+						{
+							"key": "workId",
+							"value": "123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST PUPKA",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/home/voinchuguna/pr/kpo3/README.md"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/upload?student=Pupka&workId=122",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"upload"
+					],
+					"query": [
+						{
+							"key": "student",
+							"value": "Pupka"
+						},
+						{
+							"key": "workId",
+							"value": "122"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REPORTS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/works/122/reports",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"works",
+						"122",
+						"reports"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
