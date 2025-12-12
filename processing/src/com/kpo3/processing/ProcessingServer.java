@@ -76,8 +76,8 @@ public class ProcessingServer {
 
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
 
-                String selStudent = "SELECT student_id FROM submissions WHERE id = ?";
-                int studentId;
+                String selStudent = "SELECT student FROM submissions WHERE id = ?";
+                String studentId;
                 try (PreparedStatement ps = conn.prepareStatement(selStudent)) {
                     ps.setInt(1, submissionId);
                     ResultSet rs = ps.executeQuery();
@@ -85,17 +85,17 @@ public class ProcessingServer {
                         send(exchange, 500, "Unknown submissionId");
                         return;
                     }
-                    studentId = rs.getInt(1);
+                    studentId = rs.getString(1);
                 }
 
                 String sel = "SELECT submission_id FROM reports r " +
                         "JOIN submissions s ON r.submission_id = s.id " +
-                        "WHERE r.hash = ? AND s.student_id <> ?";
+                        "WHERE r.hash = ? AND s.student <> ?";
                 boolean existsOtherStudent = false;
 
                 try (PreparedStatement ps = conn.prepareStatement(sel)) {
                     ps.setString(1, hash);
-                    ps.setInt(2, studentId);
+                    ps.setString(2, studentId);
                     ResultSet rs = ps.executeQuery();
                     if (rs.next()) {
                         existsOtherStudent = true;
@@ -108,10 +108,10 @@ public class ProcessingServer {
                     String update = "UPDATE reports r " +
                             "SET plagiat = TRUE " +
                             "FROM submissions s " +
-                            "WHERE r.submission_id = s.id AND r.hash = ? AND s.student_id <> ?";
+                            "WHERE r.submission_id = s.id AND r.hash = ? AND s.student <> ?";
                     try (PreparedStatement ps = conn.prepareStatement(update)) {
                         ps.setString(1, hash);
-                        ps.setInt(2, studentId);
+                        ps.setString(2, studentId);
                         ps.executeUpdate();
                     }
                 }
@@ -159,7 +159,7 @@ public class ProcessingServer {
 
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
 
-                String sel = "SELECT r.submission_id, r.plagiat, s.student_name " +
+                String sel = "SELECT r.submission_id, r.plagiat, s.student " +
                         "FROM reports r " +
                         "JOIN submissions s ON r.submission_id = s.id " +
                         "WHERE s.work_id = ?";
@@ -171,12 +171,12 @@ public class ProcessingServer {
                     while (rs.next()) {
                         int submissionId = rs.getInt("submission_id");
                         boolean plagiat = rs.getBoolean("plagiat");
-                        String studentName = rs.getString("student_name");
+                        String student = rs.getString("student");
 
-                        reports.add(
-                                "{\"submissionId\":" + submissionId +
-                                        ",\"plagiat\":" + plagiat +
-                                        ",\"studentName\":\"" + studentName + "\"}");
+                        reports.add("{\"submissionId\":" + submissionId +
+                                ",\"student\":\"" + student + "\"" +
+                                ",\"plagiat\":" + plagiat +
+                                "}");
                     }
                 }
 
